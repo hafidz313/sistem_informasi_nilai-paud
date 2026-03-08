@@ -5,9 +5,9 @@
 <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
 
-        <h1 class="logo me-auto"><a href="/">Paud Teratai</a></h1>
+        <h1 class="logo me-auto"><a href="/">TK PGRI 1 Tajinan</a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        <a href="index.html" class="logo me-auto"><img src="assets/img/pgri.jpeg" alt="" class="img-fluid"></a>
 
         <nav id="navbar" class="navbar order-last order-lg-0">
             <ul>
@@ -35,7 +35,7 @@
 
             <div class="row">
                 <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
-                    <img src="assets/landing/img/hero-bg.jpg" class="img-fluid" alt="">
+                    <img src="assets/landing/img/pgri.jpeg" class="img-fluid" alt="">
                 </div>
                 <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
                     <h3>VISI & MISI.</h3>
@@ -107,11 +107,10 @@
                     <div class="col-lg-3 col-md-6 footer-contact">
                         <h3>Alamat</h3>
                         <p>
-                            Jl. Cilandak No.148-8 <br>
-                            Sarijadi, Kec. Sukasari<br>
-                            Kota Bandung, Jawa Barat 40151 <br><br>
+                        Jl.klengkeng Rt 08 Rw 01<br>
+                        Kab. Malang<br>
                             <strong>Phone:</strong> +1 5589 55488 55<br>
-                            <strong>Email:</strong> info@example.com<br>
+                            <strong>Email:</strong> tkpgri1tajinan@gmail.com<br>
                         </p>
                     </div>
                 </div>
@@ -122,7 +121,7 @@
 
             <div class="me-md-auto text-center text-md-start">
                 <div class="copyright">
-                    &copy; Copyright <strong><span>PaudTeratai</span></strong>. All Rights Reserved
+                    &copy; Copyright <strong><span>TKPGRI1Tajinan</span></strong>. All Rights Reserved
                 </div>
                 <div class="credits">
                     <!-- All the links in the footer should remain intact. -->

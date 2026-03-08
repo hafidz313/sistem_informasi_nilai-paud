@@ -30,7 +30,7 @@
                     @if(count($all_siswa) > 0)
                     @foreach($all_siswa as $user)
                     <tr>
-                        <td>
+                        <!-- <td>
                             <div class="d-flex px-2">
                                 <div>
                                     <img src="{{ asset('storage/images/'.$user->poto) }}"
@@ -40,6 +40,9 @@
                                     <h6 class="mb-0 text-sm">{{ $user->nama }}</h6>
                                 </div>
                             </div>
+                        </td> -->
+                        <td>
+                            <span class="text-xs font-weight-bold">{{ $user->nama}}</span>
                         </td>
                         <td>
                             <span class="text-xs font-weight-bold">{{ $user->nisn ? $user->nisn : '-' }}</span>

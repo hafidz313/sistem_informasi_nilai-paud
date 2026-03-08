@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('login.action') }}" method="POST" role="form"
+                            <form action="{{ route('actionlogin') }}" method="POST" role="form"
                                 accept="application/json" class="text-start">
                                 @csrf
                                 <div class="input-group input-group-outline my-3">

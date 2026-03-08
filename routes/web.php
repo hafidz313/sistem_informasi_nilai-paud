@@ -25,13 +25,14 @@ Route::group(['prefix' => '/'], function() {
     Route::get('/contact', function () {
         return view('contact');
     });
-    Route::get('/signin', function () {
-        if (Auth::check()) {
-            return redirect('dashboard');
-        }
-        return view('login');
-    })->name('login');
+    
 });
+
+
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('actionlogin', [AuthController::class, 'actionlogin'])->name('actionlogin');
+
+Route::get('actionlogout', [AuthController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
 
 Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function() {
     Route::get('/', [Dashboard::class, 'index'])->name('dashboard');

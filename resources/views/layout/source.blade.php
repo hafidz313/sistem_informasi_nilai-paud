@@ -10,7 +10,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/landing/img/hero-bg.jpg" rel="icon">
+  <link href="assets/paud/img/pgri.jpeg" rel="icon">
   <link href="assets/landing/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
