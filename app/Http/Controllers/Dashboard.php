@@ -28,7 +28,42 @@ class Dashboard extends Controller
 
             return view('dashboard.index', ['nilai' => $nilai]);
         }
+        
+        if(Auth::check() && Auth::user()->role === 'guru') {
+            $guru_id = Auth::user()->id;
+            
+            // Stats untuk guru
+            $total_siswa = User::where('role', 'siswa')->count();
+            $total_nilai_diberikan = Nilai::join('users', 'users.id', '=', 'nilai_siswa.user_id')
+                ->where('users.role', 'siswa')
+                ->count();
+            $siswa_belum_dinilai = User::where('role', 'siswa')
+                ->whereNotExists(function($query) {
+                    $query->select('id')
+                          ->from('nilai_siswa')
+                          ->whereRaw('nilai_siswa.user_id = users.id');
+                })->count();
+            $total_aspek = Aspek::count();
+            
+            // Siswa terbaru yang dinilai
+            $recent_grades = Nilai::join('users', 'users.id', '=', 'nilai_siswa.user_id')
+                ->join('poin_aspek', 'poin_aspek.id', '=', 'nilai_siswa.poin_id')
+                ->join('aspek', 'aspek.id', '=', 'poin_aspek.aspek_id')
+                ->select('users.nama', 'aspek.nama_aspek', 'nilai_siswa.nilai', 'nilai_siswa.created_at')
+                ->orderBy('nilai_siswa.created_at', 'desc')
+                ->limit(5)
+                ->get();
+                
+            return view('dashboard.index', [
+                'total_siswa' => $total_siswa,
+                'total_nilai_diberikan' => $total_nilai_diberikan,
+                'siswa_belum_dinilai' => $siswa_belum_dinilai,
+                'total_aspek' => $total_aspek,
+                'recent_grades' => $recent_grades
+            ]);
+        }
 
+        // Admin dashboard
         $total_siswa = User::where('role', '=', 'siswa')->count();
         $total_guru = User::where('role', '=', 'guru')->count();
         $kelas_a = Biodata::where('kelas', '=', 'A')->count();
@@ -256,17 +291,47 @@ class Dashboard extends Controller
 
     public function nilai() {
         $guru_id = Auth::user()->id;
-        $guru = Biodata::find($guru_id);
+        $guru = Biodata::where('user_id', $guru_id)->first();
         
-        $siswa = Biodata::where('role', '=', 'siswa')
-            ->where('kelas', '=', $guru -> kelas)
-            ->join('users', 'users.id', '=', 'biodata.user_id')
+        $siswa = Biodata::join('users', 'users.id', '=', 'biodata.user_id')
+            ->where('users.role', '=', 'siswa')
             ->select('biodata.*', 'users.id', 'users.nama')
-            ->paginate(10);
+            ->get();
+            
+        // Get latest semester and year for each student
+        foreach($siswa as $s) {
+            $latestNilai = Nilai::where('user_id', $s->id)
+                ->orderBy('awal_ajaran', 'desc')
+                ->orderBy('semester', 'desc')
+                ->first();
+                
+            if($latestNilai) {
+                // Next semester logic
+                if($latestNilai->semester == 1) {
+                    $s->last_semester = 2;
+                    $s->last_awal = $latestNilai->awal_ajaran;
+                    $s->last_akhir = $latestNilai->akhir_ajaran;
+                } else {
+                    $s->last_semester = 1;
+                    $s->last_awal = $latestNilai->awal_ajaran + 1;
+                    $s->last_akhir = $latestNilai->akhir_ajaran + 1;
+                }
+            } else {
+                $s->last_semester = 1;
+                $s->last_awal = date('Y');
+                $s->last_akhir = date('Y') + 1;
+            }
+        }
+        
         return view('dashboard.nilai', ['all_siswa' => $siswa]);
     }
 
     public function nilai_detail($user_id) {
+        $siswa = Biodata::where('user_id', $user_id)
+            ->join('users', 'users.id', '=', 'biodata.user_id')
+            ->select('biodata.*', 'users.nama')
+            ->first();
+            
         $nilai = Nilai::where('user_id', '=', $user_id)
             ->join('poin_aspek', 'poin_aspek.id', '=', 'nilai_siswa.poin_id')
             ->join('aspek', 'aspek.id', '=', 'poin_aspek.aspek_id')
@@ -276,7 +341,7 @@ class Dashboard extends Controller
             ->select('poin_aspek.*', 'aspek.nama_aspek', 'aspek.kode')
             ->get();
 
-        return view('dashboard.nilai_detail', ['nilai' => $nilai, 'poins' => $poins]);
+        return view('dashboard.nilai_detail', ['siswa' => $siswa, 'nilai' => $nilai, 'poins' => $poins]);
     }
 
     public function nilai_add(Request $request, $user_id) {
@@ -295,6 +360,7 @@ class Dashboard extends Controller
             'user_id' => $user_id,
             'poin_id' => $request->poin_id,
             'nilai' => $request->nilai,
+            'catatan' => $request->catatan,
         ]);
 
         return redirect('dashboard/nilai/'.$user_id)->with('success', 'Berhasil menambahkan data nilai!');

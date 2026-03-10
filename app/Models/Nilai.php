@@ -16,5 +16,6 @@ class Nilai extends Model
         'awal_ajaran',
         'akhir_ajaran',
         'nilai',
+        'catatan',
     ];
 }

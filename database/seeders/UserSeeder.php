@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'nama' => 'Administrator',
             'role' => 'admin',
             'username' => 'admin',
-            'password' => Hash::make('121212'),
+            'password' => Hash::make('admin'),
         ]);
         Biodata::create([
             'user_id' => $user->id,
